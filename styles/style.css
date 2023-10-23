@@ -12,7 +12,7 @@ button {
 }
 
 body {
-    background-color: lightcoral;
+    background-color: black;
     color: #fff;
 }
 
@@ -97,14 +97,14 @@ main {
 }
 
 .actions button {
-    color: crimson;
+    color: black;
     margin-right: 1rem;
     opacity: 0.8;
     transform: 0.1s;
 }
 
 .actions button.remove-btn {
-    color: crimson;
+    color: black;
 }
 
 .actions button:hover {
