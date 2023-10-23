@@ -3,12 +3,16 @@ const createBtn = document.getElementById("create-btn")
 
 let todos = []
 
-const createTodoElement = (item) => {
+createBtn.addEventListener("click", createNewTodo)
+
+function createTodoElement(item) {
     const itemElement = document.createElement("div")
     itemElement.classList.add("item")
 
     const checkBoxElement = document.createElement("input")
     checkBoxElement.type = "checkbox"
+    checkBoxElement.checked = item.isDone
+    console.log(item.isDone)
 
     if (item.isDone) {
         itemElement.classList.add("complete")
@@ -16,7 +20,7 @@ const createTodoElement = (item) => {
 
     const inputElement = document.createElement("input")
     inputElement.type = "text"
-    itemElement.value = item.text
+    inputElement.value = item.text
     inputElement.setAttribute("disabled", "")
 
     const actionsElememt = document.createElement("div")
@@ -35,6 +39,7 @@ const createTodoElement = (item) => {
 
     inputElement.addEventListener("blur", () => {
         inputElement.setAttribute("disabled", "")
+        savetoLocalStorage()
     })
 
     checkBoxElement.addEventListener("change", () => {
@@ -54,6 +59,7 @@ const createTodoElement = (item) => {
     removeBtn.addEventListener("click", () => {
         todos = todos.filter((t) => t.id !== item.id)
         itemElement.remove()
+        savetoLocalStorage()
     })
 
     actionsElememt.append(editBtn)
@@ -62,20 +68,44 @@ const createTodoElement = (item) => {
     itemElement.append(inputElement)
     itemElement.append(actionsElememt)
 
-    return { itemElement, inputElement, editBtn, removeBtn }
+    return { itemElement, inputElement }
 }
 
-const createNewTodo = () => {
+function createNewTodo() {
     const item = { id: new Date().getTime(), text: "", isDone: false }
 
     todos.unshift(item)
 
-    const { itemElement, inputElement, editBtn, removeBtn } =
-        createTodoElement(item)
+    const { itemElement, inputElement } = createTodoElement(item)
 
     list.prepend(itemElement)
     inputElement.removeAttribute("disabled")
     inputElement.focus()
+
+    savetoLocalStorage()
 }
 
-createBtn.addEventListener("click", createNewTodo)
+function savetoLocalStorage() {
+    const todoData = JSON.stringify(todos)
+    localStorage.setItem("my-todos", todoData)
+}
+
+function loadFromLocalStorage() {
+    const todoData = localStorage.getItem("my-todos")
+
+    if (todoData) {
+        todos = JSON.parse(todoData)
+    }
+}
+
+function displayTodos() {
+    loadFromLocalStorage()
+
+    for (let i = 0; i < todos.length; i++) {
+        const item = todos[i]
+        const { itemElement } = createTodoElement(item)
+        list.append(itemElement)
+    }
+}
+
+displayTodos()
