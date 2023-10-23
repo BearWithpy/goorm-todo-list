@@ -4,6 +4,7 @@ const createBtn = document.getElementById("create-btn")
 let todos = []
 
 createBtn.addEventListener("click", createNewTodo)
+displayTodos()
 
 function createTodoElement(item) {
     const itemElement = document.createElement("div")
@@ -39,7 +40,14 @@ function createTodoElement(item) {
 
     inputElement.addEventListener("blur", () => {
         inputElement.setAttribute("disabled", "")
-        savetoLocalStorage()
+        saveToLocalStorage()
+    })
+
+    inputElement.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            inputElement.blur()
+            saveToLocalStorage()
+        }
     })
 
     checkBoxElement.addEventListener("change", () => {
@@ -49,6 +57,7 @@ function createTodoElement(item) {
         } else {
             itemElement.classList.remove("complete")
         }
+        saveToLocalStorage()
     })
 
     editBtn.addEventListener("click", () => {
@@ -59,7 +68,7 @@ function createTodoElement(item) {
     removeBtn.addEventListener("click", () => {
         todos = todos.filter((t) => t.id !== item.id)
         itemElement.remove()
-        savetoLocalStorage()
+        saveToLocalStorage()
     })
 
     actionsElememt.append(editBtn)
@@ -82,10 +91,10 @@ function createNewTodo() {
     inputElement.removeAttribute("disabled")
     inputElement.focus()
 
-    savetoLocalStorage()
+    saveToLocalStorage()
 }
 
-function savetoLocalStorage() {
+function saveToLocalStorage() {
     const todoData = JSON.stringify(todos)
     localStorage.setItem("my-todos", todoData)
 }
@@ -107,5 +116,3 @@ function displayTodos() {
         list.append(itemElement)
     }
 }
-
-displayTodos()
