@@ -9,6 +9,10 @@
 
 개발 기간: 2023.10.24
 
+### Github Pages deployment
+
+https://bearwithpy.github.io/goorm-todo-list/
+
 ### 비고
 
 -   엔터키 누르면 항목이 disabled 되도록 함 (edit 버튼을 누르면 다시 활성화)
