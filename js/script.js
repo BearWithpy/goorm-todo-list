@@ -1,7 +1,7 @@
-const list = document.getElementById("list")
+const todoList = document.getElementById("list")
 const createBtn = document.getElementById("create-btn")
 
-let todos = []
+let todoListArray = []
 
 createBtn.addEventListener("click", createNewTodo)
 displayTodos()
@@ -13,7 +13,6 @@ function createTodoElement(item) {
     const checkBoxElement = document.createElement("input")
     checkBoxElement.type = "checkbox"
     checkBoxElement.checked = item.isDone
-    console.log(item.isDone)
 
     if (item.isDone) {
         itemElement.classList.add("complete")
@@ -30,6 +29,7 @@ function createTodoElement(item) {
     const editBtn = document.createElement("button")
     editBtn.classList.add("material-icons")
     editBtn.innerText = "edit"
+
     const removeBtn = document.createElement("button")
     removeBtn.classList.add("material-icons", "remove-btn")
     removeBtn.innerText = "remove_circles"
@@ -66,7 +66,7 @@ function createTodoElement(item) {
     })
 
     removeBtn.addEventListener("click", () => {
-        todos = todos.filter((t) => t.id !== item.id)
+        todoListArray = todoListArray.filter((t) => t.id !== item.id)
         itemElement.remove()
         saveToLocalStorage()
     })
@@ -81,13 +81,13 @@ function createTodoElement(item) {
 }
 
 function createNewTodo() {
-    const item = { id: new Date().getTime(), text: "", isDone: false }
+    const todoItem = { id: new Date().getTime(), text: "", isDone: false }
 
-    todos.unshift(item)
+    todoListArray.unshift(todoItem)
 
-    const { itemElement, inputElement } = createTodoElement(item)
+    const { itemElement, inputElement } = createTodoElement(todoItem)
 
-    list.prepend(itemElement)
+    todoList.prepend(itemElement)
     inputElement.removeAttribute("disabled")
     inputElement.focus()
 
@@ -95,7 +95,7 @@ function createNewTodo() {
 }
 
 function saveToLocalStorage() {
-    const todoData = JSON.stringify(todos)
+    const todoData = JSON.stringify(todoListArray)
     localStorage.setItem("my-todos", todoData)
 }
 
@@ -103,16 +103,16 @@ function loadFromLocalStorage() {
     const todoData = localStorage.getItem("my-todos")
 
     if (todoData) {
-        todos = JSON.parse(todoData)
+        todoListArray = JSON.parse(todoData)
     }
 }
 
 function displayTodos() {
     loadFromLocalStorage()
 
-    for (let i = 0; i < todos.length; i++) {
-        const item = todos[i]
+    for (let i = 0; i < todoListArray.length; i++) {
+        const item = todoListArray[i]
         const { itemElement } = createTodoElement(item)
-        list.append(itemElement)
+        todoList.append(itemElement)
     }
 }
